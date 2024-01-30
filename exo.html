@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="traitement.php" method="post">
+        
+        <p>
+            <label for="genre"></label>
+            <input type="radio" name="" id="">
+        </p>
+
+        <p>
+        <label for="mdp">mot de passe</label>
+        <input type="password" name="mdp">
+        </p>
+        <p>
+        <label for="pays">nationalités</label>
+        <select id="nationalityDropdown">
+            <!-- Options seront ajoutées dynamiquement ici -->
+        </select>
+        </p>
+        <p>    
+        <label for="nom">Nom</label>
+        <input type="text" name="nom" id="nom">
+        </p>
+        
+        <p>
+        <label for="email">Email</label>
+        <input type="email" name="mail" id="mail">
+        </p>
+
+        <p>
+        <label for="message">Message</label>
+        <textarea name="message" id="msg" cols="30" rows="10" placeholder="ecrivez le message"></textarea>
+        </p>
+        
+        <p>
+            <label for="photo">Choisissez une photo:</label><br>
+            <input type="file" id="photo" name="photo" accept="image/*">
+        </p>
+        
+        <input type="submit" value="Envoyez">
+
+    </form>
+    <script>
+        // Récupérer les données de l'API
+        fetch('https://restcountries.com/v3.1/all?')
+          .then(response => response.json())
+          .then(data => {
+            // Récupérer la liste des pays avec leurs nationalités
+            const countries = data.map(country => ({
+              name: country.name.common,
+              nationality: country.altSpellings[0]
+            }));
+
+            // Trier la liste par ordre alphabétique
+            countries.sort((a, b) => a.name.localeCompare(b.name));
+
+            // Remplir la liste déroulante
+            const dropdown = document.getElementById('nationalityDropdown');
+            countries.forEach(country => {
+              const option = document.createElement('option');
+              option.value = country.nationality;
+              option.text = country.name;
+              dropdown.appendChild(option);
+            });
+          })
+          .catch(error => console.error('Erreur lors de la récupération des données :', error));
+    </script>
+
+</body>
+</html>
